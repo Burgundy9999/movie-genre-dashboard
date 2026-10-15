@@ -4,12 +4,11 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>
-   Rotten Tomatoes | Genre &amp; Ratings
-  </title>
+<title>Rotten Tomatoes | 700 Popular Movies</title>
 <script src="https://d3js.org/d3.v7.min.js">
 </script>
 <style>
+
 /* Dashboard layout, typography, qualitative Dark2 palette and interaction styles. */
 
 *{box-sizing:border-box}
@@ -65,18 +64,57 @@ footer{font-size:12px;color:#4f5954;margin-top:20px;line-height:1.6}
 @media(max-width:1080px){main{padding:20px 16px 40px}}
 
 
+
+/* Three-column composition: fixed left rail and two analytical views. */
+.dashboard-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;margin-top:20px;align-items:start}
+.sidebar{display:flex;flex-direction:column;gap:14px;min-width:0}
+.sidebar .controls{display:flex;flex-direction:column;align-items:stretch;margin:0;gap:12px;padding:18px}
+.sidebar .legend{display:flex;flex-direction:column;align-items:stretch;gap:6px}
+.sidebar .legend button{text-align:left;padding:6px 3px}
+.sidebar .controls #reset{align-self:flex-start}
+.sidebar .kpis{display:flex;flex-direction:column;gap:12px;margin:0}
+.sidebar .kpi{padding:14px 16px}
+.sidebar .kpi strong{font-size:27px}
+.dashboard-layout .grid{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:18px;align-items:stretch;min-width:0}
+.trend-panel{grid-column:1/-1}
+.trend-panel .trend-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:stretch}
+.trend-subview{min-width:0}
+.trend-subview h3{font-size:13px;color:#47524b;margin:12px 0 6px;font-weight:650}
+.trend-panel>h2{margin-bottom:5px}
+.trend-panel>p{margin:5px 0 10px}
+@media(max-width:1180px){.dashboard-layout{grid-template-columns:200px minmax(0,1fr)}.dashboard-layout .grid{grid-template-columns:1fr}}
+@media(max-width:780px){.dashboard-layout{grid-template-columns:1fr}.sidebar .legend{display:flex;flex-direction:row;flex-wrap:wrap}.sidebar .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.trend-panel .trend-inner{grid-template-columns:1fr}}
+
+/* Keep genre filters accessible while scrolling through the third view. */
+@media(min-width:781px){
+  .sidebar{
+    position:sticky;
+    top:16px;
+    align-self:start;
+    max-height:calc(100vh - 32px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    scrollbar-width:thin;
+  }
+}
+.sidebar .legend button.active{
+  background:#f0f3ef;
+  border-radius:6px;
+  padding-left:8px;
+  box-shadow:inset 3px 0 0 #58665c;
+}
+.sidebar .legend button{transition:background-color .15s ease}
+
 </style>
 </head>
 <body>
 <main>
-<div class="kicker">
-    Interactive film analysis / D3.js
-   </div>
-<h1>
-    Movies, genres &amp; changing tastes
-   </h1>
-<p>Explore how critic and audience ratings, box office, and genre trends compare. Click a movie, genre, or trend line to highlight its genre across all views.</p>
-<section class="controls">
+
+<h1>Ratings and Box Office of Popular Movies Across Seven Genres on Rotten Tomatoes</h1>
+<p>Explore how critic and audience ratings, box office, and genre trends compare. Click genres to compare multiple categories across all views; click again to remove. Clear selection resets all.</p>
+
+
+<div class="dashboard-layout"><aside class="sidebar"><section class="controls">
 <div class="legend" id="legend">
 </div>
 <button id="reset">
@@ -85,8 +123,7 @@ footer{font-size:12px;color:#4f5954;margin-top:20px;line-height:1.6}
 <span class="status" id="status">
      All seven genres
     </span>
-</section>
-<div class="kpis">
+</section><div class="kpis">
 <div class="kpi">
 <small>
       Movies in dataset
@@ -119,16 +156,13 @@ footer{font-size:12px;color:#4f5954;margin-top:20px;line-height:1.6}
       —
      </strong>
 </div>
-</div>
-<div class="grid">
+</div></aside><div class="grid">
 <section class="panel">
 <div class="kicker">
       01 / Movie-level agreement
      </div>
-<h2>
-      Both critics and audiences rate these films highly
-     </h2>
-<p>Each dot represents a movie; the dashed diagonal indicates equal scores.</p>
+<h2>Critics Generally Give Higher Ratings</h2>
+<p>Each dot represents a movie; the dashed line marks equal scores.</p>
 <div class="chart" id="scatter">
 </div>
 </section>
@@ -142,34 +176,24 @@ footer{font-size:12px;color:#4f5954;margin-top:20px;line-height:1.6}
 <p>Filled dot: critics · Hollow dot: audience · Bars: mean U.S. gross.</p>
 <div class="chart" id="genre">
 </div>
-
 </section>
-<div class="section-divider">Historical patterns · scores by decade</div>
-<div class="trend-grid">
-<section class="panel">
-<div class="kicker">
-       03a / Across decades
-      </div>
-<h2>
-       Critic scores fluctuate but remain relatively stable across decades
-      </h2>
-<p>Black: overall average · Colors: genre averages.</p>
+
+<div class="panel trend-panel"><div class="kicker">03 / Ratings across decades</div><h2>Critic Ratings Remain Relatively Stable, While Audience Ratings Vary More Across Decades</h2><p>Black: overall average · Colors: genre averages.</p>
+
+
+<div class="trend-inner"><section class="trend-subview"><h3>Critic scores</h3>
+
+
+
 <div class="chart" id="criticTrend">
 </div>
-</section>
-<section class="panel">
-<div class="kicker">
-       03b / Across decades
-      </div>
-<h2>
-       Audience ratings show more variation across decades
-      </h2>
+</section><section class="trend-subview"><h3>Audience scores</h3>
+
 
 <div class="chart" id="audienceTrend">
 </div>
-</section>
-</div>
-</div>
+</section></div></div>
+</div></div>
 <footer>Source: Rotten Tomatoes top-movies dataset · 700 selected films (100 per genre). U.S. gross excludes missing values. Some decade averages use small samples; hover to view n. The 2020s are incomplete. Rating axes are truncated.</footer>
 </main>
 <div class="tooltip" id="tooltip">
@@ -6482,6 +6506,7 @@ const raw = [
 
 </script>
 <script>
+
 // D3.js visualization and coordinated interactions.
 // The `raw` dataset is defined in data.js and loaded before this script.
 
@@ -6489,12 +6514,19 @@ const genres=['Action & Adventure','Animation','Comedy','Drama','Horror','Myster
 const palette=['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e','#e6ab02','#a6761d'];const color=d3.scaleOrdinal(genres,palette);
 const data=raw.map((d,i)=>({id:i,title:d.title,year:+d.year,type:d.type,critic:+d.critic_score,audience:+d.people_score,gross:d['box_office_(gross_usa)']==null?null:+d['box_office_(gross_usa)']})).filter(d=>Number.isFinite(d.critic)&&Number.isFinite(d.audience));data.forEach(d=>d.decade=Math.floor(d.year/10)*10);
 const allDecades=[...new Set(data.map(d=>d.decade))].sort((a,b)=>a-b);
-let selected=null;const $=s=>document.querySelector(s);const money=v=>v==null?'Not reported':d3.format('$,.3s')(v).replace('G','B');const fmt=v=>v==null?'—':d3.format('.1f')(v);
+const selected=new Set();const $=s=>document.querySelector(s);const money=v=>v==null?'Not reported':d3.format('$,.3s')(v).replace('G','B');const fmt=v=>v==null?'—':d3.format('.1f')(v);
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const tooltip=$('#tooltip');// Show detailed tooltip information when hovering a data mark.
 function tip(e,html){tooltip.innerHTML=html;tooltip.style.opacity=1;moveTip(e)}function moveTip(e){tooltip.style.left=Math.min(e.clientX+12,innerWidth-270)+'px';tooltip.style.top=Math.min(e.clientY+12,innerHeight-150)+'px'}function hideTip(){tooltip.style.opacity=0}
-// Select or deselect a genre and propagate the selection to every view.
-function toggle(g){selected=selected===g?null:g;render()}$('#reset').onclick=()=>{selected=null;render()};
+// Multi-select: clicking a genre toggles its membership in the shared Set.
+function isActive(g){return selected.has(g)}
+function isMuted(g){return selected.size>0&&!selected.has(g)}
+function toggle(g){
+ if(selected.has(g)) selected.delete(g);
+ else selected.add(g);
+ render();
+}
+$('#reset').onclick=()=>{selected.clear();render()};
 const summary=genres.map(g=>{const a=data.filter(d=>d.type===g),v=a.filter(d=>d.gross!=null&&d.gross>=0);return {genre:g,n:a.length,critic:d3.mean(a,d=>d.critic),audience:d3.mean(a,d=>d.audience),gross:d3.mean(v,d=>d.gross),grossN:v.length}});
 const groupSeries=(field)=>genres.map(g=>({genre:g,values:allDecades.map(dec=>{const a=data.filter(d=>d.type===g&&d.decade===dec);return {decade:dec,value:a.length?d3.mean(a,d=>d[field]):null,n:a.length}})}));
 const overallSeries=field=>allDecades.map(dec=>{const a=data.filter(d=>d.decade===dec);return {decade:dec,value:a.length?d3.mean(a,d=>d[field]):null,n:a.length}});
@@ -6511,15 +6543,16 @@ function svgFor(id,h){
  return {svg,w,h};
 }
 // View 01: film-level critic score versus audience score scatterplot.
-function drawScatter(){const {svg,w,h}=svgFor('#scatter',380),m={top:15,right:20,bottom:45,left:48},iw=w-m.left-m.right,ih=h-m.top-m.bottom;const minScore=Math.min(d3.min(data,d=>d.critic),d3.min(data,d=>d.audience));const maxScore=Math.max(d3.max(data,d=>d.critic),d3.max(data,d=>d.audience));const scoreLo=Math.max(0,Math.floor((minScore-2)/5)*5),scoreHi=Math.min(100,Math.ceil((maxScore+2)/5)*5);const x=d3.scaleLinear().domain([scoreLo,scoreHi]).range([0,iw]),y=d3.scaleLinear().domain([scoreLo,scoreHi]).range([ih,0]);const g=svg.append('g').attr('transform',`translate(${m.left},${m.top})`);g.append('g').attr('class','gridline').call(d3.axisLeft(y).ticks(5).tickSize(-iw).tickFormat(''));g.append('g').attr('class','axis').attr('transform',`translate(0,${ih})`).call(d3.axisBottom(x).ticks(5));g.append('g').attr('class','axis').call(d3.axisLeft(y).ticks(5));g.append('line').attr('x1',x(scoreLo)).attr('y1',y(scoreLo)).attr('x2',x(scoreHi)).attr('y2',y(scoreHi)).attr('stroke','#d25d44').attr('stroke-dasharray','5 5').attr('stroke-width',1.5);g.append('text').attr('x',iw/2).attr('y',ih+35).attr('text-anchor','middle').text('Critic score').attr('fill','#555').attr('font-size',12);g.append('text').attr('transform','rotate(-90)').attr('x',-ih/2).attr('y',-35).attr('text-anchor','middle').text('Audience score').attr('fill','#555').attr('font-size',12);g.selectAll('circle.point').data([...data].sort((a,b)=>(a.type===selected)-(b.type===selected))).join('circle').attr('class','point').attr('cx',d=>x(d.critic)).attr('cy',d=>y(d.audience)).attr('r',d=>d.type===selected?4.4:3.4).attr('fill',d=>color(d.type)).attr('opacity',d=>selected&&d.type!==selected?.07:.83).on('click',(e,d)=>toggle(d.type)).on('pointerenter',(e,d)=>tip(e,`<b>${escapeHtml(d.title)}</b><br>${d.year} · ${escapeHtml(d.type)}<br>Critics: ${fmt(d.critic)} · Audience: ${fmt(d.audience)}<br>U.S. gross: ${money(d.gross)}<br><i>Click to highlight genre</i>`)).on('pointermove',moveTip).on('pointerleave',hideTip)}
+function drawScatter(){const {svg,w,h}=svgFor('#scatter',380),m={top:15,right:20,bottom:45,left:48},iw=w-m.left-m.right,ih=h-m.top-m.bottom;const minScore=Math.min(d3.min(data,d=>d.critic),d3.min(data,d=>d.audience));const maxScore=Math.max(d3.max(data,d=>d.critic),d3.max(data,d=>d.audience));const scoreLo=Math.max(0,Math.floor((minScore-2)/5)*5),scoreHi=Math.min(100,Math.ceil((maxScore+2)/5)*5);const x=d3.scaleLinear().domain([70,100]).range([0,iw]),y=d3.scaleLinear().domain([scoreLo,scoreHi]).range([ih,0]);const g=svg.append('g').attr('transform',`translate(${m.left},${m.top})`);g.append('g').attr('class','gridline').call(d3.axisLeft(y).ticks(5).tickSize(-iw).tickFormat(''));g.append('g').attr('class','axis').attr('transform',`translate(0,${ih})`).call(d3.axisBottom(x).ticks(5));g.append('g').attr('class','axis').call(d3.axisLeft(y).ticks(5));g.append('line').attr('x1',x(Math.max(70,scoreLo))).attr('y1',y(Math.max(70,scoreLo))).attr('x2',x(Math.min(100,scoreHi))).attr('y2',y(Math.min(100,scoreHi))).attr('stroke','#d25d44').attr('stroke-dasharray','5 5').attr('stroke-width',1.5);g.append('text').attr('x',iw/2).attr('y',ih+35).attr('text-anchor','middle').text('Critic score').attr('fill','#555').attr('font-size',12);g.append('text').attr('transform','rotate(-90)').attr('x',-ih/2).attr('y',-35).attr('text-anchor','middle').text('Audience score').attr('fill','#555').attr('font-size',12);g.selectAll('circle.point').data([...data].sort((a,b)=>Number(isActive(a.type))-Number(isActive(b.type)))).join('circle').attr('class','point').attr('cx',d=>x(d.critic)).attr('cy',d=>y(d.audience)).attr('r',d=>isActive(d.type)?4.4:3.4).attr('fill',d=>color(d.type)).attr('opacity',d=>isMuted(d.type)?.07:.83).on('click',(e,d)=>toggle(d.type)).on('pointerenter',(e,d)=>tip(e,`<b>${escapeHtml(d.title)}</b><br>${d.year} · ${escapeHtml(d.type)}<br>Critics: ${fmt(d.critic)} · Audience: ${fmt(d.audience)}<br>U.S. gross: ${money(d.gross)}<br><i>Click to add/remove genre</i>`)).on('pointermove',moveTip).on('pointerleave',hideTip)}
 // View 02: compare genre-average ratings and reported U.S. box-office gross.
-function drawGenre(){const {svg,w,h}=svgFor('#genre',380),m={top:35,right:20,bottom:45,left:185},iw=w-m.left-m.right,split=iw*.53,scoreLo=Math.max(0,Math.floor((d3.min(summary.flatMap(d=>[d.critic,d.audience]))-5)/5)*5),scoreHi=Math.min(100,Math.ceil((d3.max(summary.flatMap(d=>[d.critic,d.audience]))+5)/5)*5),scoreX=d3.scaleLinear().domain([scoreLo,scoreHi]).range([0,split-25]),grossMax=d3.max(summary,d=>d.gross)||1,grossX=d3.scaleLinear().domain([0,grossMax*1.12]).range([0,iw-split-30]);const g=svg.append('g').attr('transform',`translate(${m.left},${m.top})`);g.append('text').attr('x',0).attr('y',-16).attr('font-weight',700).attr('font-size',12).text('Mean score (zoomed axis)');g.append('text').attr('x',split+15).attr('y',-16).attr('font-weight',700).attr('font-size',12).text('Mean U.S. gross');g.append('g').attr('class','axis').attr('transform',`translate(0,${h-m.top-34})`).call(d3.axisBottom(scoreX).ticks(5));g.append('g').attr('class','axis').attr('transform',`translate(${split+15},${h-m.top-34})`).call(d3.axisBottom(grossX).ticks(4).tickFormat(money));summary.forEach((d,i)=>{const yy=22+i*44;const r=g.append('g').attr('class','genre-row').on('click',()=>toggle(d.genre)).on('pointerenter',e=>tip(e,`<b>${escapeHtml(d.genre)}</b><br>Movies: ${d.n}<br>Avg. critics: ${fmt(d.critic)}<br>Avg. audience: ${fmt(d.audience)}<br>Mean U.S. gross: ${money(d.gross)}<br>Gross reported: ${d.grossN}/${d.n}`)).on('pointermove',moveTip).on('pointerleave',hideTip);r.append('rect').attr('class','row-bg').attr('x',-m.left+3).attr('y',yy-19).attr('width',w-26).attr('height',39).attr('rx',5).attr('fill',selected===d.genre?'#f3eee7':'transparent');r.append('text').attr('x',-175).attr('y',yy+4).attr('font-size',12).attr('font-weight',selected===d.genre?800:500).attr('fill',selected&&selected!==d.genre?'#aaa':'#30332f').text(d.genre);const opacity=selected&&selected!==d.genre?.18:1;r.append('line').attr('x1',scoreX(d.critic)).attr('x2',scoreX(d.audience)).attr('y1',yy).attr('y2',yy).attr('stroke',color(d.genre)).attr('stroke-width',3).attr('opacity',opacity);r.append('circle').attr('cx',scoreX(d.critic)).attr('cy',yy).attr('r',5).attr('fill',color(d.genre)).attr('opacity',opacity);r.append('circle').attr('cx',scoreX(d.audience)).attr('cy',yy).attr('r',5).attr('fill','#fffefa').attr('stroke',color(d.genre)).attr('stroke-width',2.5).attr('opacity',opacity);r.append('rect').attr('x',split+15).attr('y',yy-8).attr('height',16).attr('width',grossX(d.gross||0)).attr('rx',2).attr('fill',color(d.genre)).attr('opacity',selected&&selected!==d.genre?.13:.85);r.append('text').attr('x',split+18+grossX(d.gross||0)).attr('y',yy+4).attr('font-size',10).attr('fill','#777').text(money(d.gross))})}
+function drawGenre(){const {svg,w,h}=svgFor('#genre',380),m={top:35,right:20,bottom:45,left:185},iw=w-m.left-m.right,split=iw*.53,scoreLo=Math.max(0,Math.floor((d3.min(summary.flatMap(d=>[d.critic,d.audience]))-5)/5)*5),scoreHi=Math.min(100,Math.ceil((d3.max(summary.flatMap(d=>[d.critic,d.audience]))+5)/5)*5),scoreX=d3.scaleLinear().domain([scoreLo,scoreHi]).range([0,split-25]),grossMax=d3.max(summary,d=>d.gross)||1,grossX=d3.scaleLinear().domain([0,grossMax*1.12]).range([0,iw-split-30]);const g=svg.append('g').attr('transform',`translate(${m.left},${m.top})`);g.append('text').attr('x',0).attr('y',-16).attr('font-weight',700).attr('font-size',12).text('Mean score (zoomed axis)');g.append('text').attr('x',split+15).attr('y',-16).attr('font-weight',700).attr('font-size',12).text('Mean U.S. gross');g.append('g').attr('class','axis').attr('transform',`translate(0,${h-m.top-45})`).call(d3.axisBottom(scoreX).ticks(5));g.append('g').attr('class','axis').attr('transform',`translate(${split+15},${h-m.top-45})`).call(d3.axisBottom(grossX).ticks(4).tickFormat(money));summary.forEach((d,i)=>{const yy=22+i*44;const r=g.append('g').attr('class','genre-row').on('click',()=>toggle(d.genre)).on('pointerenter',e=>tip(e,`<b>${escapeHtml(d.genre)}</b><br>Movies: ${d.n}<br>Avg. critics: ${fmt(d.critic)}<br>Avg. audience: ${fmt(d.audience)}<br>Mean U.S. gross: ${money(d.gross)}<br>Gross reported: ${d.grossN}/${d.n}`)).on('pointermove',moveTip).on('pointerleave',hideTip);r.append('rect').attr('class','row-bg').attr('x',-m.left+3).attr('y',yy-19).attr('width',w-26).attr('height',39).attr('rx',5).attr('fill',isActive(d.genre)?'#f3eee7':'transparent');r.append('text').attr('x',-175).attr('y',yy+4).attr('font-size',12).attr('font-weight',isActive(d.genre)?800:500).attr('fill',isMuted(d.genre)?'#aaa':'#30332f').text(d.genre);const opacity=isMuted(d.genre)?.18:1;r.append('line').attr('x1',scoreX(d.critic)).attr('x2',scoreX(d.audience)).attr('y1',yy).attr('y2',yy).attr('stroke',color(d.genre)).attr('stroke-width',3).attr('opacity',opacity);r.append('circle').attr('cx',scoreX(d.critic)).attr('cy',yy).attr('r',5).attr('fill',color(d.genre)).attr('opacity',opacity);r.append('circle').attr('cx',scoreX(d.audience)).attr('cy',yy).attr('r',5).attr('fill','#fffefa').attr('stroke',color(d.genre)).attr('stroke-width',2.5).attr('opacity',opacity);r.append('rect').attr('x',split+15).attr('y',yy-8).attr('height',16).attr('width',grossX(d.gross||0)).attr('rx',2).attr('fill',color(d.genre)).attr('opacity',isMuted(d.genre)?.13:.85);r.append('text').attr('x',split+18+grossX(d.gross||0)).attr('y',yy+4).attr('font-size',10).attr('fill','#777').text(money(d.gross))})}
 // View 03: render critic or audience rating averages by decade.
 function drawTrend(id,field){const {svg,w,h}=svgFor(id,340),m={top:15,right:12,bottom:46,left:44},iw=w-m.left-m.right,ih=h-m.top-m.bottom;const x=d3.scaleLinear().domain(d3.extent(allDecades)).range([0,iw]),y=d3.scaleLinear().domain([yMin,yMax]).range([ih,0]);const g=svg.append('g').attr('transform',`translate(${m.left},${m.top})`);g.append('g').attr('class','gridline').call(d3.axisLeft(y).ticks(6).tickSize(-iw).tickFormat(''));g.append('g').attr('class','axis').call(d3.axisLeft(y).ticks(6));g.append('g').attr('class','axis').attr('transform',`translate(0,${ih})`).call(d3.axisBottom(x).tickValues(allDecades.filter((_,i)=>i%2===0)).tickFormat(d=>d+'s'));const line=d3.line().defined(d=>d.value!=null).x(d=>x(d.decade)).y(d=>y(d.value));const overall=overallSeries(field);g.append('path').datum(overall).attr('fill','none').attr('stroke','#242827').attr('stroke-width',3).attr('d',line);
-g.selectAll('.overall-hit').data(overall.filter(d=>d.value!=null)).enter().append('circle').attr('class','overall-hit').attr('cx',d=>x(d.decade)).attr('cy',d=>y(d.value)).attr('r',7).attr('fill','transparent').style('cursor','help').on('pointerenter',(e,d)=>tip(e,`<b>Overall average · ${d.decade}s</b><br>Mean ${field==='critic'?'critic':'audience'} score: ${fmt(d.value)}<br>Movies in decade: ${d.n}`)).on('pointermove',moveTip).on('pointerleave',hideTip);const lines=groupSeries(field);lines.forEach(s=>{const active=selected===s.genre,fade=selected&&selected!==s.genre;g.append('path').datum(s.values).attr('class','trend-line').attr('stroke',color(s.genre)).attr('stroke-width',active?4:2).attr('opacity',fade?.09:active?1:.72).attr('d',line).on('click',()=>toggle(s.genre));g.selectAll(null).data(s.values.filter(d=>d.value!=null)).enter().append('circle').attr('cx',d=>x(d.decade)).attr('cy',d=>y(d.value)).attr('r',active?4.5:3).attr('fill',color(s.genre)).attr('opacity',fade?.12:active?1:.7).style('cursor','pointer').on('click',()=>toggle(s.genre)).on('pointerenter',(e,d)=>tip(e,`<b>${escapeHtml(s.genre)} · ${d.decade}s</b><br>Mean ${field==='critic'?'critic':'audience'} score: ${fmt(d.value)}<br>Movies in decade: ${d.n}<br><i>Click to highlight genre</i>`)).on('pointermove',moveTip).on('pointerleave',hideTip)})}
+g.selectAll('.overall-hit').data(overall.filter(d=>d.value!=null)).enter().append('circle').attr('class','overall-hit').attr('cx',d=>x(d.decade)).attr('cy',d=>y(d.value)).attr('r',7).attr('fill','transparent').style('cursor','help').on('pointerenter',(e,d)=>tip(e,`<b>Overall average · ${d.decade}s</b><br>Mean ${field==='critic'?'critic':'audience'} score: ${fmt(d.value)}<br>Movies in decade: ${d.n}`)).on('pointermove',moveTip).on('pointerleave',hideTip);const lines=groupSeries(field);lines.forEach(s=>{const active=isActive(s.genre),fade=isMuted(s.genre);g.append('path').datum(s.values).attr('class','trend-line').attr('stroke',color(s.genre)).attr('stroke-width',active?4:2).attr('opacity',fade?.09:active?1:.72).attr('d',line).on('click',()=>toggle(s.genre));g.selectAll(null).data(s.values.filter(d=>d.value!=null)).enter().append('circle').attr('cx',d=>x(d.decade)).attr('cy',d=>y(d.value)).attr('r',active?4.5:3).attr('fill',field==='audience'?'#ffffff':color(s.genre)).attr('stroke',color(s.genre)).attr('stroke-width',field==='audience'?2:0).attr('opacity',fade?.12:active?1:.7).style('cursor','pointer').on('click',()=>toggle(s.genre)).on('pointerenter',(e,d)=>tip(e,`<b>${escapeHtml(s.genre)} · ${d.decade}s</b><br>Mean ${field==='critic'?'critic':'audience'} score: ${fmt(d.value)}<br>Movies in decade: ${d.n}<br><i>Click to add/remove genre</i>`)).on('pointermove',moveTip).on('pointerleave',hideTip)})}
 // Coordinated update: refresh KPIs, genre legend, and all charts.
-function render(){const subset=selected?data.filter(d=>d.type===selected):data;$('#count').textContent=subset.length;$('#critic').textContent=fmt(d3.mean(subset,d=>d.critic));$('#audience').textContent=fmt(d3.mean(subset,d=>d.audience));$('#gross').textContent=money(d3.median(subset.filter(d=>d.gross!=null&&d.gross>=0),d=>d.gross));$('#status').textContent=selected?'Selected: '+selected:'All seven genres';$('#legend').innerHTML=genres.map(g=>`<button class="${selected===g?'active':''}" data-genre="${escapeHtml(g)}"><i style="background:${color(g)}"></i>${escapeHtml(g)}</button>`).join('');document.querySelectorAll('#legend button').forEach(b=>b.onclick=()=>toggle(b.dataset.genre));drawScatter();drawGenre();drawTrend('#criticTrend','critic');drawTrend('#audienceTrend','audience')}
+function render(){const subset=selected.size?data.filter(d=>selected.has(d.type)):data;$('#count').textContent=subset.length;$('#critic').textContent=fmt(d3.mean(subset,d=>d.critic));$('#audience').textContent=fmt(d3.mean(subset,d=>d.audience));$('#gross').textContent=money(d3.median(subset.filter(d=>d.gross!=null&&d.gross>=0),d=>d.gross));$('#status').textContent=selected.size?`${selected.size} of 7 genres selected · ${subset.length} movies`:'All seven genres';$('#legend').innerHTML=genres.map(g=>`<button type="button" aria-pressed="${isActive(g)}" class="${isActive(g)?'active':''}" data-genre="${escapeHtml(g)}"><i style="background:${color(g)}"></i>${escapeHtml(g)}</button>`).join('');document.querySelectorAll('#legend button').forEach(b=>b.onclick=()=>toggle(b.dataset.genre));drawScatter();drawGenre();drawTrend('#criticTrend','critic');drawTrend('#audienceTrend','audience')}
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(render,150)});render();
+
 
 </script>
 </body>

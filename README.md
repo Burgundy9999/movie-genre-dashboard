@@ -41,7 +41,7 @@ pip install pandas
 python clean.py
 ```
 
-The original uncleaned Kaggle CSV is **not** included in this submission; download it from the dataset page if you wish to reproduce the cleaning. The cleaned CSV is already included, so **running the cleaning script is not required to open the dashboard**. The interactive dashboard uses a selected seven-genre subset embedded in `data.js`.
+The original uncleaned Kaggle CSV is included in this submission; the cleaned CSV is already included, so **running the cleaning script is not required to open the dashboard**. The interactive dashboard uses a selected seven-genre subset embedded in `data.js`.
 
 ## Data and interpretation
 The dashboard analyzes a selected sample of 700 films (100 per genre) in seven genres. It is not a representative sample of all releases. Decade-level genre means may be based on small samples; hover points to see the count. U.S. box-office averages use reported values only; 2020s data are incomplete.

@@ -1,3 +1,4 @@
+
 // Embedded film data: 700 selected movies from the cleaned Rotten Tomatoes dataset.
 // Kept in a separate file so the visualization logic stays readable.
 const raw = [
@@ -6302,3 +6303,4 @@ const raw = [
     "box_office_(gross_usa)": NaN
   }
 ];
+
