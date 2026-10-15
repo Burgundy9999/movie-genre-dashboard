@@ -1,0 +1,54 @@
+/* Dashboard layout, typography, qualitative Dark2 palette and interaction styles. */
+
+*{box-sizing:border-box}
+body{margin:0;background:#f8f9f8;color:#202724;font:14px system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1530px;margin:auto;padding:28px 32px 50px}
+h1{font-size:37px;letter-spacing:-1.5px;margin:5px 0 9px}
+h2{font-size:18px;margin:4px 0 6px}
+p{color:#525c57;line-height:1.5}
+.kicker{color:#d25d44;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.panel,.controls,.kpi{background:#ffffff;border:1px solid #e2e6e3;border-radius:13px}
+.controls{padding:15px 18px;display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin:20px 0 16px}
+.controls button{background:white;border:1px solid #d9d9d0;border-radius:7px;padding:8px 12px;cursor:pointer}
+.controls button:hover{border-color:#d25d44}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px}
+.legend button{border:0;background:transparent;padding:4px 0;cursor:pointer;font-size:12px;color:#555}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;border:1px solid #32323255}
+.legend .active{font-weight:800;color:#111}
+.legend button:focus-visible,.controls button:focus-visible{outline:2px solid #1b6b86;outline-offset:3px}
+.status{font-size:12px;color:#4d5752}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.kpi{padding:15px}
+.kpi strong{font-size:28px;display:block;margin-top:5px}
+.kpi small{font-size:11px;color:#74776e;text-transform:uppercase;font-weight:800}
+.grid{display:grid;grid-template-columns:minmax(0,0.92fr) minmax(0,1.45fr);gap:18px;align-items:stretch}
+.panel{padding:21px 22px 18px;min-width:0;box-shadow:0 2px 10px #272b2208}
+.panel.full{grid-column:auto}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart{min-height:250px;position:relative}
+.caption{font-size:12px;color:#4e5852}
+.axis text{font-size:11px;fill:#4c5751}
+.axis path,.axis line{stroke:#cbd2ce}
+.gridline line{stroke:#edf0ed;stroke-width:.75;stroke-dasharray:2 4}
+.gridline path{display:none}
+.point{cursor:pointer;stroke:#fff;stroke-width:.6}
+.point:hover{stroke:#222;stroke-width:2}
+.genre-row{cursor:pointer}
+.genre-row:hover .row-bg{fill:#f4f0e9}
+.trend-line{fill:none;stroke-width:2;cursor:pointer}
+.trend-line:hover{stroke-width:4}
+.tooltip{position:fixed;pointer-events:none;background:#1e2723;color:#ffffff;padding:10px 12px;border-radius:7px;font-size:12px;line-height:1.6;max-width:260px;opacity:0;z-index:10;box-shadow:0 6px 20px #0002}
+footer{font-size:12px;color:#4f5954;margin-top:20px;line-height:1.6}
+@media(max-width:1080px){.grid{grid-template-columns:1fr}
+.trend-grid{grid-template-columns:1fr}
+.panel.full{grid-column:auto}
+.kpis{grid-template-columns:repeat(2,1fr)}}
+.trend-grid{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:stretch}
+.section-divider{grid-column:1/-1;display:flex;align-items:center;gap:14px;margin:5px 0 -4px;color:#777c74;font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase}
+.section-divider:after{content:"";height:1px;background:#dadbd2;flex:1}
+.panel p{margin:6px 0 12px;font-size:12px;max-width:75ch}
+.panel h2{line-height:1.2}
+.kpi{border-top:3px solid #d9ded8}
+.panel:focus-within{outline:1px solid #d7dcd2}
+@media(max-width:1080px){main{padding:20px 16px 40px}}
+
